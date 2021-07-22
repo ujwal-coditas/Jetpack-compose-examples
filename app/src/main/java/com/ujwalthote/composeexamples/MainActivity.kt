@@ -23,62 +23,112 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
+
+    val list by lazy {
+        mutableListOf(
+            "Cube example",
+            "Animation",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example",
+            "Some example"
+        )
+    }
+
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Column {
-                MainView()
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .padding(0.dp, 20.dp)
+            ) {
+                MainView(Modifier.weight(7f))
+                Box(
+                    modifier = Modifier
+                        .background(Color.Green)
+                        .fillMaxSize()
+                        .weight(3f),
+                    contentAlignment = Alignment.Center
+                    ) {
+                    Button(
+                        modifier = Modifier
+                            .wrapContentSize(),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.White) ,
+                        onClick = {
+                            Toast.makeText(
+                                applicationContext,
+                                "You clicked me",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }) {
+                        Text(text = "Button")
+                    }
+                }
             }
         }
     }
-}
 
 
-@ExperimentalMaterialApi
-@Composable
-fun MainView() {
-    LazyColumn {
-        items(20) { index ->
-            ListItem(textToBeShown = "Item $index")
+    @ExperimentalMaterialApi
+    @Composable
+    fun MainView(modifier: Modifier = Modifier) {
+        LazyColumn(
+            modifier.background(Color.Red)
+        ) {
+            items(list.size) { index ->
+                ListItem(textToBeShown = list[index])
+            }
         }
     }
-}
 
 
-@ExperimentalMaterialApi
-@Composable
-fun ListItem(textToBeShown: String) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp,4.dp),
-        onClick = {
-            Log.d("tag", textToBeShown)
-        }
-    ) {
-        Text(
-            fontSize  = 18.sp,
+    @ExperimentalMaterialApi
+    @Composable
+    fun ListItem(textToBeShown: String) {
+        Card(
             modifier = Modifier
-                .padding(16.dp,8.dp),
-            text = textToBeShown,
-            textAlign = TextAlign.Center
+                .fillMaxWidth()
+                .padding(16.dp, 4.dp),
+            onClick = {
+                Log.d("tag", textToBeShown)
+            }
+        ) {
+            Text(
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .padding(16.dp, 8.dp),
+                text = textToBeShown,
+                textAlign = TextAlign.Center
 
-        )
+            )
+        }
     }
-}
 
-@ExperimentalMaterialApi
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MainView()
-}
+    @ExperimentalMaterialApi
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        MainView()
+    }
 
-@ExperimentalMaterialApi
-@Preview(showBackground = true)
-@Composable
-fun ListDefaultPreview() {
-    ListItem(textToBeShown = "Text To Be Shown")
+    @ExperimentalMaterialApi
+    @Preview(showBackground = true)
+    @Composable
+    fun ListDefaultPreview() {
+        ListItem(textToBeShown = "Text To Be Shown")
+    }
 }
 
