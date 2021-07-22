@@ -1,5 +1,6 @@
 package com.ujwalthote.composeexamples
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -24,24 +25,12 @@ import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
 
+    data class Data(val title: String, var classType : Class<*>? = null)
+
     val list by lazy {
         mutableListOf(
-            "Cube example",
-            "Animation",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example",
-            "Some example"
+            Data("Canvas sample", AnimationSample::class.java),
+            Data("Animation"),
         )
     }
 
@@ -89,7 +78,7 @@ class MainActivity : ComponentActivity() {
             modifier.background(Color.Red)
         ) {
             items(list.size) { index ->
-                ListItem(textToBeShown = list[index])
+                ListItem(dataObject = list[index])
             }
         }
     }
@@ -97,20 +86,24 @@ class MainActivity : ComponentActivity() {
 
     @ExperimentalMaterialApi
     @Composable
-    fun ListItem(textToBeShown: String) {
+    fun ListItem(dataObject: Data) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 4.dp),
             onClick = {
-                Log.d("tag", textToBeShown)
+                dataObject.classType?.let {
+                    startActivity(Intent(this, it))
+                }
+
+                Log.d("tag", dataObject.title)
             }
         ) {
             Text(
                 fontSize = 18.sp,
                 modifier = Modifier
                     .padding(16.dp, 8.dp),
-                text = textToBeShown,
+                text = dataObject.title,
                 textAlign = TextAlign.Center
 
             )
@@ -128,7 +121,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun ListDefaultPreview() {
-        ListItem(textToBeShown = "Text To Be Shown")
+        ListItem(Data("Some text"))
     }
 }
 
